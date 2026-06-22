@@ -1,0 +1,95 @@
+{
+  "name": "@particle-academy/fancy-catalog",
+  "version": "0.1.0",
+  "description": "Headless Stripe catalog (products, prices, plans, checkout) with a pluggable feature source. The framework-agnostic Node/TypeScript mirror of the PHP particle-academy/laravel-catalog.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Particle-Academy/fancy-catalog-js.git"
+  },
+  "homepage": "https://github.com/Particle-Academy/fancy-catalog-js#readme",
+  "bugs": "https://github.com/Particle-Academy/fancy-catalog-js/issues",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./features": {
+      "import": {
+        "types": "./dist/features.d.ts",
+        "default": "./dist/features.js"
+      },
+      "require": {
+        "types": "./dist/features.d.cts",
+        "default": "./dist/features.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "tsup"
+  },
+  "keywords": [
+    "stripe",
+    "catalog",
+    "billing",
+    "subscriptions",
+    "checkout",
+    "products",
+    "prices",
+    "features",
+    "fancy",
+    "human-plus"
+  ],
+  "peerDependencies": {
+    "stripe": "*",
+    "@particle-academy/fancy-features": "*"
+  },
+  "peerDependenciesMeta": {
+    "stripe": {
+      "optional": false
+    },
+    "@particle-academy/fancy-features": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "ulid": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "stripe": "^17.0.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.0",
+    "vitest": "^3.2.6"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "overrides": {
+    "esbuild": "^0.28.1"
+  }
+}
