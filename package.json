@@ -1,6 +1,6 @@
 {
   "name": "@particle-academy/fancy-catalog",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Headless Stripe catalog (products, prices, plans, checkout) with a pluggable feature source. The framework-agnostic Node/TypeScript mirror of the PHP particle-academy/laravel-catalog.",
   "repository": {
     "type": "git",
@@ -61,8 +61,8 @@
     "human-plus"
   ],
   "peerDependencies": {
-    "stripe": "*",
-    "@particle-academy/fancy-features": "*"
+    "@particle-academy/fancy-features": "*",
+    "stripe": "*"
   },
   "peerDependenciesMeta": {
     "stripe": {
@@ -83,7 +83,7 @@
     "vitest": "^3.2.6"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "publishConfig": {
     "access": "public"
