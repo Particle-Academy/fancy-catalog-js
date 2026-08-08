@@ -15,6 +15,33 @@ upgrading.
 
 ## [Unreleased]
 
+## 0.3.0 — 2026-08-07
+
+### Added
+
+- **`catalogLive` — this package's Live Contract.** Pure data declaring which
+  broadcast events the catalog emits and which client query keys each one
+  invalidates, so a host can wire live updates without hand-maintaining an
+  event→key map that drifts from the backend.
+
+  ```ts
+  import { catalogLive } from "@particle-academy/fancy-catalog";
+  import { toEchoMap, useFancyEchoInvalidation } from "@particle-academy/fancy-query";
+
+  useFancyEchoInvalidation(catalogLive.channel, toEchoMap(catalogLive));
+  ```
+
+  `fancy-query` is a **type-only** import here, so this adds no dependency —
+  a host that does not want live behaviour pays nothing for the declaration.
+
+  `LaravelCatalog\LiveContract` declares the identical list, and a parity test
+  on each side asserts they match. That test is the point: drift between a
+  mirror pair is silent, because a renamed event does not throw — the browser
+  listens for a name nobody broadcasts and the UI quietly stops updating.
+
+  **What you must do:** nothing. Additive.
+
+
 ## 0.2.0 — 2026-08-07
 
 ### Changed

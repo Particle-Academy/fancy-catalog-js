@@ -18,3 +18,4 @@ export { StripeCheckout } from "./stripe-checkout.js";
 export type { CheckoutArgs, OneTimeCheckoutArgs } from "./stripe-checkout.js";
 export { Catalog, createCatalog } from "./catalog.js";
 export type { CatalogStores, CreateCatalogOptions } from "./catalog.js";
+export { catalogLive } from "./live";
