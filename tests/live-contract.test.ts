@@ -32,7 +32,9 @@ describe("catalog Live Contract", () => {
  * assertion holds in a plain `npm test` with no PHP toolchain present.
  */
 describe("parity with LaravelCatalog\\LiveContract", () => {
-    const phpPath = join(__dirname, "..", "..", "laravel-catalog", "src", "LiveContract.php");
+    const phpPath = process.env.CATALOG_PHP_SRC
+        ? join(process.env.CATALOG_PHP_SRC, "LiveContract.php")
+        : join(__dirname, "..", "..", "laravel-catalog", "src", "LiveContract.php");
 
     function phpContract(): { namespace: string; channel: string; events: Record<string, string[][]> } | null {
         let source: string;
@@ -66,8 +68,31 @@ describe("parity with LaravelCatalog\\LiveContract", () => {
         return { namespace: ns, channel, events };
     }
 
-    it("agrees on the namespace and channel", () => {
+    /**
+     * A missing PHP twin must not read as parity.
+     *
+     * These assertions used to `return` early when the file was not found, and
+     * the sibling path only resolves inside the .agi envelope — so in CI, where
+     * the PHP repo is not checked out, every case returned immediately and the
+     * suite went green having compared nothing. That is the whole failure this
+     * file exists to prevent, reproduced in the file itself.
+     *
+     * Locally a skip is still right; in CI it is a hole.
+     */
+    function requirePhp() {
         const php = phpContract();
+        if (php === null && process.env.CI) {
+            throw new Error(
+                "The PHP LiveContract was not found, so parity was not checked. " +
+                    "Set CATALOG_PHP_SRC to the PHP package's source directory, " +
+                    "or check the repo out in CI.",
+            );
+        }
+        return php;
+    }
+
+    it("agrees on the namespace and channel", () => {
+        const php = requirePhp();
         // The sibling repo is present in the envelope but not in a standalone
         // clone. Skipping beats a false failure that says the contracts differ.
         if (php === null) return;
@@ -77,14 +102,14 @@ describe("parity with LaravelCatalog\\LiveContract", () => {
     });
 
     it("declares the SAME event names on both sides", () => {
-        const php = phpContract();
+        const php = requirePhp();
         if (php === null) return;
 
         expect(Object.keys(php.events).sort()).toEqual(catalogLive.events.map((e) => e.event).sort());
     });
 
     it("invalidates the SAME keys for every event", () => {
-        const php = phpContract();
+        const php = requirePhp();
         if (php === null) return;
 
         for (const { event, keys } of catalogLive.events) {
@@ -101,7 +126,7 @@ describe("parity with LaravelCatalog\\LiveContract", () => {
         // Asserting a COUNT rather than "more than zero", because the first
         // version of this parser dropped the last entry and a non-empty check
         // sailed straight past it.
-        const php = phpContract();
+        const php = requirePhp();
         if (php === null) return;
 
         expect(php.namespace).not.toBe("");

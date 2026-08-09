@@ -15,6 +15,23 @@ upgrading.
 
 ## [Unreleased]
 
+## 0.3.1 — 2026-08-09
+
+### Fixed
+
+- **The Live Contract parity test never ran in CI.** It compares this package's
+  contract against `LaravelCatalog\LiveContract`, reading the PHP source — from a
+  hard-coded `../../laravel-catalog/`, which resolves only inside the `.agi`
+  envelope. In CI the repo is not checked out, the read failed, and every
+  assertion hit `if (php === null) return;` and passed having compared nothing.
+
+  Now: CI checks out `laravel-catalog`, the path comes from `CATALOG_PHP_SRC`
+  (sibling path as fallback), and a missing twin **throws in CI** rather than
+  returning early. Locally a skip is still right — in CI it is a hole.
+
+  Verified in three states: correct path passes, a bad path under `CI=1` fails 4
+  of 7 cases, and a bad path without `CI` still skips.
+
 ## 0.3.0 — 2026-08-07
 
 ### Added

@@ -18,6 +18,15 @@ jobs:
         with:
           node-version: "22"
 
+      # The Live Contract parity test compares this package's contract against the
+      # PHP twin's. Without the repo here it found no file and every assertion
+      # returned early -- green, having compared nothing.
+      - name: Check out laravel-catalog
+        uses: actions/checkout@v4
+        with:
+          repository: Particle-Academy/laravel-catalog
+          path: .php-catalog
+
       - name: Install
         run: npm install --no-audit --no-fund
 
@@ -26,6 +35,8 @@ jobs:
 
       - name: Test
         run: npm test
+        env:
+          CATALOG_PHP_SRC: ${{ github.workspace }}/.php-catalog/src
 
       - name: Build
         run: npm run build
