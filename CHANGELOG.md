@@ -15,6 +15,29 @@ upgrading.
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-08-12
+
+### Fixed
+
+- **`stripe` is now an OPTIONAL peer dependency.** It was declared
+  `optional: false` while every reference to it in source is `import type` — the
+  SDK is injected by the host and never bundled, which this package's own
+  docblock already described as "optional-but-expected".
+
+  That mismatch broke consumers' clean installs. npm auto-installs non-optional
+  peers, and `npm ci` REFUSES a tree whose lockfile lacks one, so an app that
+  never touches Stripe from JavaScript failed with
+  `Missing: stripe@22.5.0 from lock file`.
+
+  **What to do:** nothing, unless you were relying on this package to pull the
+  Stripe SDK in for you. If you use the Stripe-backed paths — `syncCatalog`,
+  `createCheckoutSession` — you were already passing a configured `Stripe`
+  instance, and you install `stripe` yourself as you always did.
+
+  A test now fails if any peer this package does not runtime-import is marked
+  required.
+
+
 ## 0.3.1 — 2026-08-09
 
 ### Fixed
