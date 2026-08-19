@@ -96,8 +96,19 @@ export interface Price {
   active: boolean;
   /** ISO-4217 currency, e.g. "USD". */
   currency: string;
-  /** Price in cents (the PHP `unit_amount`). */
-  unitAmount: number;
+  /**
+   * Whole minor units — the PHP `unit_amount`. **Nullable.**
+   *
+   * Stripe sets NO unit amount on a `tiered` or `custom_unit_amount` price: the
+   * tiers carry the money. This package models `tiers`, `tiersMode` and
+   * `customUnitAmount` and then made every one of them unrepresentable by
+   * typing this `number`.
+   *
+   * "Cents" is a misnomer this field deliberately avoids: JPY has no cent and
+   * KWD has three decimal places. It is integer minor units, never a float —
+   * `int(19.99 * 100)` is 1998 in every IEEE-754 language.
+   */
+  unitAmount: number | null;
   type: PriceType;
   pricingModel?: PricingModel | null;
 

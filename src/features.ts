@@ -37,7 +37,15 @@ export interface FeatureGrant {
   type: FeatureType; // "boolean" | "resource"
   enabled: boolean; // included / on for this subject?
   includedQuantity?: number | null; // resource: quota per period (null = unlimited)
-  overageLimit?: number | null; // resource: soft cap before block
+  /**
+   * Resource: BILLABLE OVERAGE permitted past `includedQuantity`, as a CEILING.
+   *
+   * `null` or `0` means no overage — consumption stops at the included
+   * quantity, which is what every configuration written before
+   * fancy-features 0.5.0 says. It is read by `FeatureManager.tryConsume`, and
+   * only where the overage can be RECORDED; see that package.
+   */
+  overageLimit?: number | null;
   source?: string; // provenance for explain(), e.g. "catalog:prod_123"
   config?: Record<string, unknown>;
 }

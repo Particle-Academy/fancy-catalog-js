@@ -15,6 +15,48 @@ upgrading.
 
 ## [Unreleased]
 
+## 0.6.0 — 2026-08-19
+
+Matches `laravel-catalog` 0.13.0. Full argument:
+`.ai/plans/fancy-commerce-gating-rulings.md`.
+
+### Fixed
+
+- **BREAKING (types only): a tiered price could not be represented.**
+  `Price.unitAmount` was typed `number`, and Stripe sets **no** unit amount on a
+  `tiered` or `custom_unit_amount` price — the tiers carry the money. This
+  package models `tiers`, `tiersMode` and `customUnitAmount`, sends them, and
+  compares them on the way back, and then made every one of them impossible one
+  field away.
+
+  `unitAmount` is now `number | null`, and it is **omitted from the Stripe
+  payload entirely** when null — not sent as `null`, which is an API error
+  alongside `tiers`, and emphatically not as `0`, which is a free price.
+
+  **What to do:** nothing at runtime — an existing price with a number still
+  behaves identically. **TypeScript will flag every place you read
+  `price.unitAmount` as a number**, which is the point: those places now have a
+  case they did not have before. Narrow with `?? 0` only where a missing amount
+  genuinely means free, which for a tiered price it does not.
+
+- **`pricingChanged` compared unit amounts with `!==`.** Prices are immutable, so
+  "changed" means archive the live price and create a replacement — a churned
+  price id and orphaned references, silently. With `null` now a real value, a
+  strict comparison against `undefined` (a price object built without the field)
+  reads as a change on every sync. Amounts go through the new exported
+  `sameAmount()`, which treats `null` and `undefined` as the same absence and
+  keeps both distinct from `0`.
+
+  Same class of fix as the key-order comparison in 0.5.0, on a scalar.
+
+### Changed
+
+- **`FeatureGrant.overageLimit` now means something**, in the package that owns
+  the contract. It was "soft cap before block" in a comment and nothing in code.
+  It is a **ceiling** on billable consumption past `includedQuantity`, honoured
+  by `@particle-academy/fancy-features` 0.5.0. This package's job is unchanged:
+  it populates the field from the pivot. *No consumer action.*
+
 ## 0.5.0 - 2026-08-18
 
 ### Fixed

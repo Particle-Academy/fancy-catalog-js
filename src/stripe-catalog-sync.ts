@@ -202,7 +202,6 @@ export class StripeCatalogSync {
     const data: Stripe.PriceCreateParams = {
       product: product.externalId ?? undefined,
       currency: price.currency.toLowerCase(),
-      unit_amount: price.unitAmount,
       active: price.active,
       metadata: {
         ...stringifyMetadata(price.metadata),
@@ -226,6 +225,14 @@ export class StripeCatalogSync {
     if (price.lookupKey) {
       data.lookup_key = price.lookupKey;
       data.transfer_lookup_key = true;
+    }
+
+    // Sent only when there IS one. Stripe sets no unit amount on a `tiered` or
+    // `custom_unit_amount` price — the tiers carry the money — and passing
+    // `unit_amount` alongside `tiers` is an API error. Passing 0 instead would
+    // be worse: a free price, silently.
+    if (price.unitAmount !== null && price.unitAmount !== undefined) {
+      data.unit_amount = price.unitAmount;
     }
 
     if (price.billingScheme) {
@@ -277,7 +284,13 @@ export class StripeCatalogSync {
     price: Price,
     data: Stripe.PriceCreateParams,
   ): boolean {
-    if (existing.unit_amount !== price.unitAmount) return true;
+    // Both sides normalised. `null` is a real value here — a tiered price has no
+    // unit amount and Stripe returns null for it — so null and 0 must stay
+    // DIFFERENT: one means "the tiers carry the money", the other means free.
+    // Prices are immutable, so a false difference archives a live price and
+    // creates a replacement, churning the id and orphaning whatever referenced
+    // it, silently.
+    if (!sameAmount(existing.unit_amount, price.unitAmount)) return true;
     if (existing.currency !== price.currency.toLowerCase()) return true;
 
     if (price.type === "recurring") {
@@ -332,4 +345,19 @@ function stringifyMetadata(
 
 function errorMessage(e: unknown): string {
   return e instanceof Error ? e.message : String(e);
+}
+
+/**
+ * Do two unit amounts mean the same money?
+ *
+ * `null` and `undefined` both mean "no unit amount" and compare equal to each
+ * other; either compares UNEQUAL to a number, including 0.
+ */
+export function sameAmount(a: number | null | undefined, b: number | null | undefined): boolean {
+  const an = a ?? null;
+  const bn = b ?? null;
+  if (an === null || bn === null) {
+    return an === null && bn === null;
+  }
+  return an === bn;
 }

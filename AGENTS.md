@@ -37,6 +37,13 @@ Traps that have already cost something:
   first reprice of anything with a key fails with *"lookup key already exists"*.
   Send neither when there is no key: passing null clears a key already on Stripe.
 
+- **`unitAmount` is `number | null`, and null is not zero.** A tiered or
+  custom-amount price has no unit amount — Stripe sets none, the tiers carry the
+  money. It must be OMITTED from the payload rather than sent as null (an API
+  error alongside `tiers`) or as 0 (a free price). Compare amounts with
+  `sameAmount`, never `!==`: null vs undefined is not a price change, and a
+  false change archives a live price.
+
 - **`syncPrice`'s `catch` recreates the price.** It is there for a price deleted
   out from under us, but it will also swallow a genuine API error and create a
   duplicate. Be careful what you let throw inside it.
@@ -45,6 +52,10 @@ Traps that have already cost something:
 
 `fancy-features` owns the `FeatureSource` contract; this package mirrors it and
 re-exports from `./features`. The contract changes there first.
+
+`overageLimit` is a **ceiling** on billable consumption past
+`includedQuantity`, honoured by `fancy-features` 0.5.0+. This package only
+populates it from the pivot; the semantics live over there.
 
 ## Parity
 
