@@ -15,6 +15,31 @@ upgrading.
 
 ## [Unreleased]
 
+## 0.4.0 — 2026-08-18
+
+### Fixed
+
+- **Prices were synced without Stripe's native `lookup_key`, so they could not
+  be looked up by it.** The key was written into `metadata` only, and metadata
+  is not a substitute: `prices.list({ lookup_keys: [...] })` reads the real
+  field and nothing else — which is the entire reason a lookup key exists. Every
+  price this library synced was unfindable by the key it was given.
+
+  `transfer_lookup_key` is now sent with it. Stripe prices are immutable, so a
+  changed amount archives the old price and creates a replacement; without the
+  transfer, that create fails with *"lookup key already exists"* the first time
+  anyone reprices something that has a key.
+
+  Both are sent only when a key is set — passing null would clear a key already
+  on the Stripe price.
+
+  The PHP twin has had both, with a comment explaining exactly this. This is the
+  Node side catching up.
+
+  **What to do:** prices synced before this release carry the key in metadata
+  only. Re-syncing them attaches the real field.
+
+
 ## [0.3.2] - 2026-08-12
 
 ### Fixed

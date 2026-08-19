@@ -1,6 +1,6 @@
 {
   "name": "@particle-academy/fancy-catalog",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "description": "Headless Stripe catalog (products, prices, plans, checkout) with a pluggable feature source. The framework-agnostic Node/TypeScript mirror of the PHP particle-academy/laravel-catalog.",
   "repository": {
     "type": "git",

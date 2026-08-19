@@ -194,6 +194,21 @@ export class StripeCatalogSync {
       },
     };
 
+    // Stripe Prices support lookup_key NATIVELY, and the metadata copy above is
+    // not a substitute: `prices.list({ lookup_keys: [...] })` reads only the
+    // real field, which is the entire reason a lookup key exists. Sent only when
+    // set -- passing null would clear a key already on the Stripe price.
+    //
+    // `transfer_lookup_key` is what makes this survive the sync's own
+    // lifecycle. Prices are immutable, so a changed amount archives the old
+    // price and creates a replacement; without the transfer that create fails
+    // with "lookup key already exists" the first time anyone reprices something
+    // that has a key.
+    if (price.lookupKey) {
+      data.lookup_key = price.lookupKey;
+      data.transfer_lookup_key = true;
+    }
+
     if (price.billingScheme) {
       data.billing_scheme = price.billingScheme;
     }
