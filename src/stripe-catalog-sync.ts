@@ -27,6 +27,25 @@ export interface StripeCatalogSyncOptions {
   logger?: CatalogLogger;
 }
 
+/** Deep equality that does not care about object key order. Arrays keep theirs. */
+function sameShape(a: unknown, b: unknown): boolean {
+  const left = a ?? {};
+  const right = b ?? {};
+  if (typeof left !== "object" || typeof right !== "object" || left === null || right === null) {
+    return left === right;
+  }
+  if (Array.isArray(left) || Array.isArray(right)) {
+    if (!Array.isArray(left) || !Array.isArray(right) || left.length !== right.length) return false;
+    return left.every((item, i) => sameShape(item, right[i]));
+  }
+  const lk = Object.keys(left as Record<string, unknown>).sort();
+  const rk = Object.keys(right as Record<string, unknown>).sort();
+  if (lk.length !== rk.length || lk.some((k, i) => k !== rk[i])) return false;
+  return lk.every((k) =>
+    sameShape((left as Record<string, unknown>)[k], (right as Record<string, unknown>)[k]),
+  );
+}
+
 export class StripeCatalogSync {
   private readonly stripe: Stripe;
   private readonly products: ProductStore;
@@ -281,16 +300,16 @@ export class StripeCatalogSync {
     ) {
       return true;
     }
-    if (
-      JSON.stringify(existing.transform_quantity ?? {}) !==
-      JSON.stringify(data.transform_quantity ?? {})
-    ) {
+    // Compared order-INSENSITIVELY: these are objects, and the two sides come
+    // from different places -- Stripe returns its own key order, we build ours.
+    // A plain JSON compare called identical pricing "changed", which archived a
+    // live price and created a replacement, churning the price id and orphaning
+    // whatever referenced it. `tiers` above stays order-sensitive because it is
+    // an array, where order is part of the meaning.
+    if (!sameShape(existing.transform_quantity, data.transform_quantity)) {
       return true;
     }
-    if (
-      JSON.stringify(existing.custom_unit_amount ?? {}) !==
-      JSON.stringify(data.custom_unit_amount ?? {})
-    ) {
+    if (!sameShape(existing.custom_unit_amount, data.custom_unit_amount)) {
       return true;
     }
 

@@ -15,6 +15,22 @@ upgrading.
 
 ## [Unreleased]
 
+## 0.5.0 - 2026-08-18
+
+### Fixed
+
+- **Key order was treated as a pricing change, archiving live prices for
+  nothing.** `transform_quantity` and `custom_unit_amount` were compared as JSON
+  strings. Both are objects, and the two sides come from different places -
+  Stripe returns its own key order, this library builds its own - so identical
+  pricing compared unequal. Prices are immutable, so "changed" means archive the
+  old one and create a replacement: a churned price id, anything referencing the
+  old one orphaned, and no indication it happened.
+
+  Both are now compared without regard to key order. `tiers` deliberately stays
+  order-sensitive, because it is an array and its order is part of the meaning.
+
+
 ## 0.4.0 — 2026-08-18
 
 ### Fixed
