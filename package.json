@@ -77,11 +77,14 @@
   },
   "devDependencies": {
     "@particle-academy/fancy-query": "^0.8.0",
+    "@tanstack/react-query": "^5.102.8",
     "@types/node": "^20.0.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "stripe": "^17.0.0",
     "tsup": "^8.5.0",
     "typescript": "^5.8.0",
-    "vitest": "^3.2.6"
+    "vitest": "^4.1.11"
   },
   "engines": {
     "node": ">=22"
