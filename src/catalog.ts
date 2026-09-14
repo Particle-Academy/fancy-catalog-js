@@ -6,7 +6,7 @@
  */
 
 import type Stripe from "stripe";
-import { ulid } from "ulid";
+import { ulid } from "./ulid.js";
 import type {
   ConnectionTestResult,
   Price,

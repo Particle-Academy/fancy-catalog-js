@@ -15,6 +15,28 @@ upgrading.
 
 ## [Unreleased]
 
+### Removed
+
+- **The `ulid` dependency.** It was this package's only runtime dependency, so
+  every consumer installed it, and its upstream (ulid/javascript) last released
+  on 2025-11-30 — past the suite's rule that third-party code must be actively
+  maintained. The ids `createProduct`, `createPrice`, `createProductFeature` and
+  `attachFeature` assign when you pass no `id` now come from a first-party
+  generator in `src/ulid.ts`, the same one the Python twin already had.
+
+  **They are the same kind of id.** 26 characters of upper-case Crockford
+  base32, the millisecond timestamp in the first 10, 80 random bits in the last
+  16, sorting by time as a string. `tests/ulid.test.ts` was written against the
+  package first and passed there, and pins the new code against vectors the
+  package itself produced — including whole ids it generated — so ids already
+  in your store interleave with new ones in time order. Like the package's
+  `ulid()`, it is not monotonic within a single millisecond.
+
+  **What you must do:** nothing. The generator is internal, no export changed,
+  and ids you pass explicitly are kept as before. If your own code imported
+  `ulid` and relied on this package to install it, add it to your own
+  dependencies.
+
 ## 0.6.0 — 2026-08-19
 
 Matches `laravel-catalog` 0.13.0. Full argument:

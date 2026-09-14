@@ -72,9 +72,6 @@
       "optional": true
     }
   },
-  "dependencies": {
-    "ulid": "^2.3.0"
-  },
   "devDependencies": {
     "@particle-academy/fancy-query": "^0.8.0",
     "@tanstack/react-query": "^5.102.8",
