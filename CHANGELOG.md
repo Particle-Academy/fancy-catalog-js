@@ -15,6 +15,8 @@ upgrading.
 
 ## [Unreleased]
 
+## 0.6.1 — 2026-09-13
+
 ### Removed
 
 - **The `ulid` dependency.** It was this package's only runtime dependency, so
