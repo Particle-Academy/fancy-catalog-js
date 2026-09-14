@@ -1,6 +1,6 @@
 # @particle-academy/fancy-catalog
 
-[![Fancy UI suite](art/fancy-ui.svg)](https://particle.academy)
+[![Fancified](art/fancified.svg)](https://particle.academy)
 
 Headless **Stripe catalog** — products, prices, plans, and checkout — with a
 pluggable feature source. The framework-agnostic Node/TypeScript mirror of the
