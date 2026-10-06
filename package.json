@@ -1,97 +1,97 @@
 {
-  "name": "@particle-academy/fancy-catalog",
-  "version": "0.6.1",
-  "description": "Headless Stripe catalog (products, prices, plans, checkout) with a pluggable feature source. The framework-agnostic Node/TypeScript mirror of the PHP particle-academy/laravel-catalog.",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Particle-Academy/fancy-catalog-js.git"
-  },
-  "homepage": "https://github.com/Particle-Academy/fancy-catalog-js#readme",
-  "bugs": "https://github.com/Particle-Academy/fancy-catalog-js/issues",
-  "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+    "name": "@particle-academy/fancy-catalog",
+    "version": "0.6.1",
+    "description": "Headless Stripe catalog (products, prices, plans, checkout) with a pluggable feature source. The framework-agnostic Node/TypeScript mirror of the PHP particle-academy/laravel-catalog.",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Particle-Academy/fancy-catalog-js.git"
     },
-    "./features": {
-      "import": {
-        "types": "./dist/features.d.ts",
-        "default": "./dist/features.js"
-      },
-      "require": {
-        "types": "./dist/features.d.cts",
-        "default": "./dist/features.cjs"
-      }
-    }
-  },
-  "files": [
-    "dist",
-    "README.md",
-    "CHANGELOG.md"
-  ],
-  "sideEffects": false,
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "lint": "tsc --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "clean": "rm -rf dist",
-    "prepublishOnly": "tsup"
-  },
-  "keywords": [
-    "stripe",
-    "catalog",
-    "billing",
-    "subscriptions",
-    "checkout",
-    "products",
-    "prices",
-    "features",
-    "fancy",
-    "human-plus"
-  ],
-  "peerDependencies": {
-    "@particle-academy/fancy-features": "*",
-    "stripe": "*"
-  },
-  "peerDependenciesMeta": {
-    "stripe": {
-      "optional": true
+    "homepage": "https://github.com/Particle-Academy/fancy-catalog-js#readme",
+    "bugs": "https://github.com/Particle-Academy/fancy-catalog-js/issues",
+    "type": "module",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "import": {
+                "types": "./dist/index.d.ts",
+                "default": "./dist/index.js"
+            },
+            "require": {
+                "types": "./dist/index.d.cts",
+                "default": "./dist/index.cjs"
+            }
+        },
+        "./features": {
+            "import": {
+                "types": "./dist/features.d.ts",
+                "default": "./dist/features.js"
+            },
+            "require": {
+                "types": "./dist/features.d.cts",
+                "default": "./dist/features.cjs"
+            }
+        }
     },
-    "@particle-academy/fancy-features": {
-      "optional": true
+    "files": [
+        "dist",
+        "README.md",
+        "CHANGELOG.md"
+    ],
+    "sideEffects": false,
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "lint": "tsc --noEmit",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "clean": "rm -rf dist",
+        "prepublishOnly": "tsup"
+    },
+    "keywords": [
+        "stripe",
+        "catalog",
+        "billing",
+        "subscriptions",
+        "checkout",
+        "products",
+        "prices",
+        "features",
+        "fancy",
+        "human-plus"
+    ],
+    "peerDependencies": {
+        "@particle-academy/fancy-features": "*",
+        "stripe": "*"
+    },
+    "peerDependenciesMeta": {
+        "stripe": {
+            "optional": true
+        },
+        "@particle-academy/fancy-features": {
+            "optional": true
+        }
+    },
+    "devDependencies": {
+        "@particle-academy/fancy-query": "^0.8.0",
+        "@tanstack/react-query": "^5.102.8",
+        "@types/node": "^22",
+        "react": "^19.3.0",
+        "react-dom": "^19.3.0",
+        "stripe": "^17.0.0",
+        "tsup": "^8.5.0",
+        "typescript": "^5.8.0",
+        "vitest": "^4.1.11"
+    },
+    "engines": {
+        "node": ">=22"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "license": "MIT",
+    "overrides": {
+        "esbuild": "^0.28.1"
     }
-  },
-  "devDependencies": {
-    "@particle-academy/fancy-query": "^0.8.0",
-    "@tanstack/react-query": "^5.102.8",
-    "@types/node": "^20.0.0",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
-    "stripe": "^17.0.0",
-    "tsup": "^8.5.0",
-    "typescript": "^5.8.0",
-    "vitest": "^4.1.11"
-  },
-  "engines": {
-    "node": ">=22"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "license": "MIT",
-  "overrides": {
-    "esbuild": "^0.28.1"
-  }
 }
