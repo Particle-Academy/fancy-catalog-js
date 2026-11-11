@@ -15,6 +15,13 @@ upgrading.
 
 ## [Unreleased]
 
+### Changed
+
+- **Releases need a lab-run certificate.** `publish.yml` gains a read-only
+  `lab-certificate` job that every publishing job needs: a tag is published only
+  when the fancy-labs lab has certified that exact version and commit. Consumers
+  do nothing; this changes how releases are cut, not what the package does.
+
 ### Fixed
 
 - **`CHANGELOG.md` is now in the published tarball.** `files` did not whitelist it, so npm never shipped it — and this package puts breaking changes in MINOR releases and tells you in the README to read the entry before taking one. The instruction existed for the author, who has the file, and not for the consumer, who is the only one being instructed. Nothing for you to do; the file simply arrives from this release on.
@@ -122,7 +129,6 @@ Matches `laravel-catalog` 0.13.0. Full argument:
   Both are now compared without regard to key order. `tiers` deliberately stays
   order-sensitive, because it is an array and its order is part of the meaning.
 
-
 ## 0.4.0 — 2026-08-18
 
 ### Fixed
@@ -147,7 +153,6 @@ Matches `laravel-catalog` 0.13.0. Full argument:
   **What to do:** prices synced before this release carry the key in metadata
   only. Re-syncing them attaches the real field.
 
-
 ## [0.3.2] - 2026-08-12
 
 ### Fixed
@@ -169,7 +174,6 @@ Matches `laravel-catalog` 0.13.0. Full argument:
 
   A test now fails if any peer this package does not runtime-import is marked
   required.
-
 
 ## 0.3.1 — 2026-08-09
 
@@ -214,7 +218,6 @@ Matches `laravel-catalog` 0.13.0. Full argument:
 
   **What you must do:** nothing. Additive.
 
-
 ## 0.2.0 — 2026-08-07
 
 ### Changed
@@ -226,7 +229,6 @@ Matches `laravel-catalog` 0.13.0. Full argument:
 ### Why
 
 These are the kit 0.5 platform floors, applied across every package at once so a consumer never has to resolve a mix. **No API changed, nothing was removed, nothing was renamed** — only what the package requires.
-
 
 ## 0.1.1 — 2026-07-04
 
